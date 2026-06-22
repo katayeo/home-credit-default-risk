@@ -32,10 +32,10 @@ is AUC-ROC, because at an 8% default rate accuracy is meaningless.
 ```
 .
 ├── notebook/        Jupyter notebook, all 7 project phases, runs top to bottom on Kaggle
-├── presentation/    HTML slide deck (self-contained) + speaker script and Q&A
+├── presentation/    HTML slide deck + speaker script and Q&A
 ├── report/          Interpretability report (SHAP analysis of two extreme applicants)
 ├── submission/      Final submission.csv scored on Kaggle
-├── assets/          SHAP plots, feature importance, leaderboard screenshot
+├── assets/          SHAP plots, feature importance, leaderboard screenshots
 └── docs/            Original project brief + ablation documentation
 ```
 
@@ -100,7 +100,7 @@ an applicant to an 81% default probability, at 0.78 it sends another to 0.2%.
 ## Deliverables checklist
 
 - [x] Jupyter notebook, all phases
-- [x] Leaderboard screenshot (`assets/leaderboard_score.png`)
+- [x] Leaderboard screenshot (`assets/kaggle_submission.png`)
 - [x] Interpretability report
 - [x] Presentation (deck + speaker script)
 - [x] Optional: waterfall ablation workflow added (`ablation_results` in notebook,
