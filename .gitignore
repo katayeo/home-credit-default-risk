@@ -1,0 +1,15 @@
+# raw competition data (download from Kaggle, do not commit)
+*.csv
+!submission/submission.csv
+data/
+input/
+
+# python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# os / editors
+.DS_Store
+.vscode/
+*.zip

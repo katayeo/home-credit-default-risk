@@ -1,0 +1,10 @@
+# Tested on Kaggle (June 2026). Versions are whatever Kaggle ships;
+# this is the dependency list, not strict pins.
+numpy
+pandas
+scikit-learn
+lightgbm
+xgboost
+shap
+matplotlib
+seaborn
