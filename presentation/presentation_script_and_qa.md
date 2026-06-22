@@ -29,8 +29,8 @@ one row per applicant. That left us with around 675 features."
 **4 · The pipeline.**
 "We ran the seven phases from the brief: reduce dimensionality, handle the
 imbalance, build temporal features, engineer features, compare gradient boosting
-models, generate the submission, and explain it with SHAP. Each phase added
-measurable value, which is what the next slide shows."
+models, generate the submission, and explain it with SHAP. Each phase produced
+measurable evidence, which is what the next slide shows."
 
 **5 · Baseline.**
 "We started deliberately simple. One model on just the application table, no credit
@@ -47,10 +47,11 @@ at."
 **7 · The waterfall (the key slide, slow down here).**
 "This is the heart of it. Each bar is one change in the pipeline, isolated, so you
 can see what it actually bought us. We start at 0.769 with the application table.
-Adding bureau history, then previous applications, then card and point-of-sale data,
-then the installment payment behaviour, each step adds value. We finish at 0.791.
-The headline: the lift came from the data and the features, not from anything fancy
-in the model."
+Bureau history takes us to 0.774, previous applications to 0.780, POS and credit
+card history to 0.787, and installments add a small final lift to 0.787. The
+headline: the lift came from the data and the features, not from anything fancy in
+the model. The final 5-fold model gets to 0.791 later because it trains on the full
+cross-validation setup."
 
 **8 · Battle of the GBMs.**
 "We compared LightGBM and XGBoost on the same features. They finished within
@@ -162,10 +163,10 @@ back 0.792. That agreement is how we know there is no leakage."
 
 **11 · Imbalance.**
 "On the imbalance, we chose not to resample, because oversampling distorts the real
-8% rate and the probability calibration. We optimised AUC directly. And here is a
-real lesson: our first run set is_unbalance to true, it broke early stopping, the
-model quit after three rounds and scored 0.72. We removed it, set the metric to AUC,
-and went straight back to 0.79. The fix was worse than the problem."
+8% rate and the probability calibration. We optimised AUC directly, used stratified
+folds, and kept the final LightGBM aware of the skew with is_unbalance set to true.
+The lesson is that the metric and validation design matter more than faking a
+balanced dataset."
 
 **18 to 20 · Appendix (only if asked).**
 Hyperparameters: the full LightGBM config. Design decisions: why no Bayesian Network

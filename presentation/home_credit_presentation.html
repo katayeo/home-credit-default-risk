@@ -240,7 +240,7 @@
       <div class="title-meta">
         <span><b>Goal</b> Rank applicants by default risk</span>
         <span><b>Metric</b> AUC-ROC</span>
-        <span><b>Result</b> <span class="num safe">0.791</span> · top-tier public range</span>
+        <span><b>Result</b> <span class="num safe">0.791</span> · strong validated result</span>
       </div>
       <div class="members">
         <span class="chip">Kate Orefice</span>
@@ -316,7 +316,7 @@
         <div class="phase"><span class="pn">05</span><div><div class="pt">Battle of the GBMs</div><div class="pd">LightGBM vs XGBoost, 5-fold cross-validation</div></div></div>
         <div class="phase"><span class="pn">06</span><div><div class="pt">Submission</div><div class="pd">Per-applicant default probability &rarr; Kaggle</div></div></div>
         <div class="phase"><span class="pn">07</span><div><div class="pt">Interpretability</div><div class="pd">SHAP force plots — no black boxes in banking</div></div></div>
-        <div class="phase" style="border-style:dashed;border-color:var(--safe-dim)"><span class="pn">&#9733;</span><div><div class="pt">Each phase = a measurable lift</div><div class="pd">Quantified next &rarr;</div></div></div>
+        <div class="phase" style="border-style:dashed;border-color:var(--safe-dim)"><span class="pn">&#9733;</span><div><div class="pt">Each phase = measured evidence</div><div class="pd">Quantified next &rarr;</div></div></div>
       </div>
     </div>
   </section>
@@ -393,8 +393,8 @@
       <div class="wf-wrap">
         <svg id="waterfall" viewBox="0 0 1180 440" role="img" aria-label="Waterfall chart of AUC improvements"></svg>
         <div class="wf-foot">
-          <span>Single-split ablation &middot; y-axis zoomed to 0.760&ndash;0.796 to show deltas</span>
-          <span style="color:var(--safe)">baseline 0.769 &nbsp;&rarr;&nbsp; final 0.791 &nbsp;=&nbsp; <b>+0.022 AUC</b></span>
+          <span>Fixed 80/20 validation ablation &middot; y-axis zoomed to 0.760&ndash;0.796 to show deltas</span>
+          <span style="color:var(--safe)">application 0.769 &nbsp;&rarr;&nbsp; all feature groups 0.787 &nbsp;=&nbsp; <b>+0.018 AUC</b></span>
         </div>
       </div>
     </div>
@@ -441,8 +441,8 @@
       </div>
       <div class="stack">
         <span class="case-tag risk">The lesson</span>
-        <p style="margin-top:10px">Our first attempt set <span class="num">is_unbalance=True</span>. It collided with early stopping and a second metric, the model quit after <strong>3 rounds</strong> and scored <span class="num risk">0.72</span>. Removing it and setting the metric to AUC fixed it, straight back to <span class="num safe">0.79</span>.</p>
-        <p style="font-size:.9rem">Takeaway: an imbalance "fix" can do more damage than the imbalance. The metric choice did the real work.</p>
+        <p style="margin-top:10px">The important choice was the objective, not row duplication. We kept the natural base rate, used stratified folds, optimised <strong>AUC</strong>, and let the final LightGBM account for skew with <span class="num">is_unbalance=True</span>.</p>
+        <p style="font-size:.9rem">Takeaway: under 8% positives, accuracy tells the wrong story. Ranking quality and probability calibration matter more.</p>
       </div>
     </div>
   </section>
@@ -633,18 +633,16 @@
 
 <script>
 /* ===========================================================
-   WATERFALL DATA  —  edit these once you run the ablation cell.
-   Each entry is the cumulative AUC AFTER that change.
-   Baseline (0.769) and final (0.791) are REAL measured numbers.
-   The four middle values are placeholders until the ablation runs.
+   WATERFALL DATA
+   Source of truth: notebook `ablation_results`.
+   Keep presentation values rounded to 3 decimals; keep docs at 5 decimals.
    =========================================================== */
 const WAVES = [
-  { label:'Application\nonly',        value:0.769, kind:'base'  },
-  { label:'+ Bureau\nhistory',        value:0.776, kind:'step'  },
-  { label:'+ Previous\napplications', value:0.780, kind:'step'  },
-  { label:'+ POS &\nCredit Card',     value:0.783, kind:'step'  },
-  { label:'+ Installments\n(temporal)',value:0.788, kind:'step' },
-  { label:'5-fold\nensemble',         value:0.791, kind:'final' },
+  { label:'Application\nonly',        value:0.76925, kind:'base'  },
+  { label:'+ Bureau\nhistory',        value:0.77449, kind:'step'  },
+  { label:'+ Previous\napplications', value:0.78037, kind:'step'  },
+  { label:'+ POS &\nCredit Card',     value:0.78666, kind:'step'  },
+  { label:'+ Installments\n(temporal)',value:0.78725, kind:'final' },
 ];
 
 function drawWaterfall(){

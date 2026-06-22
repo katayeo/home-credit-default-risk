@@ -36,7 +36,7 @@ is AUC-ROC, because at an 8% default rate accuracy is meaningless.
 ├── report/          Interpretability report (SHAP analysis of two extreme applicants)
 ├── submission/      Final submission.csv scored on Kaggle
 ├── assets/          SHAP plots, feature importance, leaderboard screenshot
-└── docs/            Original project brief
+└── docs/            Original project brief + ablation documentation
 ```
 
 ## The pipeline (7 phases)
@@ -55,19 +55,42 @@ is AUC-ROC, because at an 8% default rate accuracy is meaningless.
    click Late Submission to join.
 2. New Kaggle Notebook, import `notebook/home_credit_default_risk.ipynb`.
 3. Add the competition dataset as input. It mounts at
-   `/kaggle/input/competitions/home-credit-default-risk/` (the `PATH` in the setup cell).
+   `/kaggle/input/home-credit-default-risk/` (the `PATH` in the setup cell).
 4. Run All (about 30 to 45 minutes). It writes `submission.csv`.
 5. Submit that file to the competition for a score around 0.79.
 
 ## Key design decisions
 
 - **No resampling.** SMOTE and undersampling distort the 8% base rate. We optimised
-  AUC directly with stratified folds.
+  AUC directly with stratified folds; the final LightGBM also uses `is_unbalance=True`
+  as a model weighting hint, not row duplication.
 - **LightGBM over XGBoost.** Tied on AUC, faster on this wide, sparse matrix.
 - **Feature-importance pruning, not PCA.** PCA destroys interpretability, which we
   needed for the SHAP phase.
 - **No Bayesian Network.** A full network over 675 one-hot features is intractable and
   would not improve ranking. The boosting model is the probabilistic model.
+- **Numeric cleanup after aggregation.** Some pandas versions keep boolean one-hot
+  min/max aggregates as object columns, so the notebook coerces any remaining
+  object columns to numeric before LightGBM.
+
+## Waterfall ablation
+
+The optional waterfall deliverable is implemented in the notebook as
+`Phase 1b - Feature-group ablation`. It measures cumulative AUC on one fixed
+stratified 80/20 validation split, using the same baseline LightGBM settings for
+each stage:
+
+| Stage | Added feature group | Features | Validation AUC | Delta |
+|---|---|---:|---:|---:|
+| Application only | application columns | 258 | 0.76925 | 0.00000 |
+| + Bureau history | `BURO_` | 320 | 0.77449 | +0.00524 |
+| + Previous applications | `PREV_` | 506 | 0.78037 | +0.00588 |
+| + POS & Credit Card | `POS_` + `CC_` | 665 | 0.78666 | +0.00628 |
+| + Installments (temporal) | `INSTAL_` | 691 | 0.78725 | +0.00059 |
+
+The notebook output `ablation_results` is the source of truth for the waterfall.
+The presentation rounds these values to 3 decimals; `docs/ablation_results.md`
+keeps 5 decimals.
 
 ## Dominant feature (from SHAP)
 
@@ -80,10 +103,10 @@ an applicant to an 81% default probability, at 0.78 it sends another to 0.2%.
 - [x] Leaderboard screenshot (`assets/leaderboard_score.png`)
 - [x] Interpretability report
 - [x] Presentation (deck + speaker script)
-- [ ] Optional: ablation to replace the estimated middle bars of the waterfall slide
-      with measured values
+- [x] Optional: waterfall ablation workflow added (`ablation_results` in notebook,
+      documented in `docs/ablation_results.md`)
 
 ## Links
 
 - Competition: https://www.kaggle.com/competitions/home-credit-default-risk/
-- Kaggle notebook (add your shared link here): _TODO_
+- Kaggle notebook share link: unavailable in this checkout
