@@ -1,6 +1,6 @@
 # Interpretability Report
 ### Home Credit Default Risk · Deliverable 3
-**Group members:** Kate Orefice, Matteo Mainetti, Anthony El Feghaly
+**Group members:** Kate Orefice, Matteo Mainetti, Anthony El Feghaly, Elie Meouchy
 
 ---
 

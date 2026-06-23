@@ -2,7 +2,7 @@
 
 Machine Learning II final project, IE University (Dr. Jaume Manero).
 
-**Team:** Kate Orefice, Matteo Mainetti, Anthony El Feghaly
+**Team:** Kate Orefice, Matteo Mainetti, Anthony El Feghaly, Elie Meouchy
 
 Predict the probability that a loan applicant will default, using alternative data,
 so that capable borrowers with thin credit histories are not turned away.
